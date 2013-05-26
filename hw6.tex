@@ -1,0 +1,97 @@
+\documentclass{article}
+\usepackage{CJK}
+\usepackage{graphicx}
+\usepackage{animate}
+\usepackage[top=1in,bottom=1in,left=1.25in,right=1.25in]{geometry}
+\usepackage[colorlinks,linkcolor=blue,anchorcolor=blue,citecolor=green]{hyperref}
+\newcommand{\ud}{\mathrm{d}}
+\begin{CJK}{UTF8}{gbsn}
+	\author{杨梓鑫\ \ 10级物理弘毅班}
+	\title{第六次计算物理作业}
+	\date{学号：2010301020023}
+	\begin{document}
+	\maketitle
+\section{Problem}
+\quad $*\mathbf{4.7.}$ Consider a hypothetical solar system consisting of a sun and one planet in which the mass of the sun is not much greater than the mass of the planet. Now you must allow for the motion of both the planet and the sun. Extend your planetary motion program to include this effect. You will have to deal with a set of equations such as those in $(\mathbf{4.7.})$ for both objects. Investigate the possible types of orbital motion found in such a system. Begin with a double star system in which the two objects are of equal mass. Then explore the behavior ehrn the masses are unequal. $Hint:$ In order to obtain the simplest orbits, it is best to pick initial conditions such that the total linear momentum is zero. While this problem can be handled with a stationary sun together with the concept of a reduced mass, this calculation is a necessary prelude to the study of orbits of planets in binary star systems, which we will consider in a later exercise.\\
+
+\section{Mechanical Analysis}
+Since the effect of planet exerting on the sun cannot be neglected now, we need to revise the basic single planetary motion to a two-body program. The gravitatioin is $$F_G=\frac{GM_sM_p}{r^2}$$ for both the sun and the planet. And the equations of motion are alike:
+\begin{eqnarray*}
+\frac{\ud ^2x_p}{\ud t^2} &=& \frac{F_{G,x_p}}{M_p} = -\frac{GM_s\left(x_p-x_s\right)}{r^3}\\	
+\frac{\ud ^2y_p}{\ud t^2} &=& \frac{F_{G,y_p}}{M_p} = -\frac{GM_s\left(y_p-y_s\right)}{r^3}\\	
+\frac{\ud ^2x_s}{\ud t^2} &=& \frac{F_{G,x_s}}{M_s} = -\frac{GM_p\left(x_s-x_p\right)}{r^3}\\	
+\frac{\ud ^2y_s}{\ud t^2} &=& \frac{F_{G,y_s}}{M_s} = -\frac{GM_p\left(y_s-y_p\right)}{r^3}\\	
+\end{eqnarray*}
+Without a particular clarify of the parameters of this hypothetical solar system, to simplify things, we will still use AU system and set $GM_s =4\pi^2$ AU$^3/$yr$^2$, while the mass ratio of the planet and the sun $$ \gamma = \frac{M_p}{M_s} \leq 1$$ which makes $$GM_p =4\pi^2\gamma \textrm{ AU}^3/\textrm{yr}^2$$\\
+
+Therefore, applying the  Euler method on this problem, we get
+\begin{eqnarray*}
+	v_{p,x,i+1} &=& v_{p,x,i}-\frac{4\pi^2\left(x_{p,i}-x_{s,i}\right)}{r_i^3}\Delta t\\
+	v_{p,y,i+1} &=& v_{p,y,i}-\frac{4\pi^2\left(y_{p,i}-y_{s,i}\right)}{r_i^3}\Delta t\\
+	v_{s,x,i+1} &=& v_{s,x,i}-\frac{4\pi^2\gamma \left(x_{s,i}-x_{p,i}\right)}{r_i^3}\Delta t\\
+	v_{s,y,i+1} &=& v_{s,y,i}-\frac{4\pi^2\gamma \left(y_{s,i}-y_{p,i}\right)}{r_i^3}\Delta t\\
+	x_{p,i+1} &=& x_{p,i}+v_{p,x,i+1}\Delta t\\
+	y_{p,i+1} &=& y_{p,i}+v_{p,y,i+1}\Delta t\\
+	x_{s,i+1} &=& x_{s,i}+v_{s,x,i+1}\Delta t\\
+	y_{s,i+1} &=& y_{s,i}+v_{s,y,i+1}\Delta t
+\end{eqnarray*}
+where $r_i=\left(\left(x_{p,i}-x_{s,i})^2+(y_{p,i}-y_{s,i}\right)^2\right)^{1/2}$.\\
+
+\section{Initial Condition}
+The initial condition is worth to discuss because we are observing them in the mass-centered frame.
+First of all, the unit of coordinates is AU and that of velocities is AU$/$yr. The starting location does not affect too much so they are $(0,0)$ for the sun and $(1,0)$ for the planet. I want to investigate how the initial velocity affect the tracjectory so the velocity for the planet is $(0,v_0)$. Since total momentum vanishes in the mass-centered frame,
+\begin{eqnarray*}
+	M_sv_{s,y}+M_pv_{p,y}&=&0\\
+	\Rightarrow v_{s,y} = -\frac{M_p}{M_s}v_{p,y}&=&-\gamma v_{p,y}
+\end{eqnarray*}
+And the time step $\Delta t=0.002$ yr.\\
+\newpage
+\section{Basic View}
+At the beginning, I set the initial velocity for the planet is $(0,2\pi)$ as the textbook, only to find out that the sun and its planet will fly apart as shown in Figure 1. Then I figured that maybe it was because that the initial velocity is too big. So I adjusted the $v_{p,y,0}$ smaller, but eventually, they ended up separating apart and never turning back.
+Apparently, the problem is about the mass ratio $\gamma$. So the next section is going to find the critical $\gamma$ that exactly hold the two moving around with each other.\\
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[scale=0.5]{/home/alexandra/CP_Hw/Chap4/2pi_G1.pdf}
+\caption{$v_{p,y,0}=2\pi$, $\gamma = 1$}
+\end{figure}
+\begin{figure}[htbp]
+\centering
+\includegraphics[scale=0.5]{/home/alexandra/CP_Hw/Chap4/02_G1.pdf}
+\caption{$v_{p,y,0}=0.2$, $\gamma = 1$}
+\end{figure}
+
+\newpage
+\section{The Stable System}
+The stable system with a sun and its planet should be that the two can move around and around periodically. As long as the mass ratio $\gamma$ is slightly less than $1$, then they can come back with the matter of time and scale. In the animation\footnote{generated by $Root$, TCanvas::print} of Figure 5, the simultaneous routes of the sun and the planet are depicted.
+\begin{figure}[htbp]
+\centering
+\includegraphics[scale=0.5]{/home/alexandra/CP_Hw/Chap4/G09.pdf}
+\caption{$\gamma = 0.9$}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[scale=0.5]{/home/alexandra/CP_Hw/Chap4/G099.pdf}
+\caption{$\gamma = 0.99$}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\animategraphics[autoplay,loop,scale=0.5]{5}{/home/alexandra/CP_Hw/Chap4/G09anim/G09anim_}{0}{120}
+\caption{The moving trajectories when $\gamma = 0.9$, the gif is set to be as a second presenting one year}
+\end{figure}
+
+\section{Trajectory Evolution}
+The final little project is trying to show how the trajectory evolves with $\gamma$, that is picture every trajectory with respect to its own $\gamma$. The {\color{red}red curve} presents the route of the sun, which is almost invisible or just a single point at the beginning with the very small $\gamma$, which is consistent with the fact of our real solar system. With the increase of $\gamma$, however, the sun is starting to move and the two routes are more and more alike to each other. At the end they fly away separately. \\
+\begin{figure}[htbp]
+\centering
+\animategraphics[autoplay,loop,scale=0.5]{5}{/home/alexandra/CP_Hw/Chap4/GRanim/GRanim_}{0}{100}
+\caption{$\gamma$ from $0.01$ to $1$}
+\end{figure}
+
+
+
+\end{CJK}
+\end{document}
+
